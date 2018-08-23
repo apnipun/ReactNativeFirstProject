@@ -25,7 +25,7 @@ import {TextInput,Button,StyleSheet,View} from 'react-native';
         return(
             <View style={styles.inputContainer}>
     <TextInput style={styles.placeInput}
-                placeholder="Type Name"
+                placeholder="Type Name of cat"
                 value={this.state.placeName}
                 onChangeText={this.placeNameChangedHandler}
                 /> 
