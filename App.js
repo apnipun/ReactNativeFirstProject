@@ -8,7 +8,7 @@ import React from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
+  Text, 
   View,
   TextInput,
   Button,
@@ -18,41 +18,25 @@ import {
 
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 import PlaceList from './src/components/PlaceList/PlaceList';
-import PlaceImage from './src/assets/image1.jpg';
+//import PlaceImage from './src/assets/image1.jpg';
+import { connect } from 'react-redux';
+import {addPlace, deletePlace } from './src/store/actions/index';
 
-export default class App extends React.Component {
-  state = {
-    places:[]
-  };
-
+class App extends React.Component {
   placeAddedHandler = placeName => {
-    this.setState(prevState =>{
-      return{
-        places: prevState.places.concat({
-          key: Math.random().toString(), 
-          name:placeName,
-          image:  PlaceImage
-        })
-      };
-    });
+   this.props.onAddPlace(placeName);
 
   };
 
   placeDeletedHandler = key => {
-    this.setState(prevState => {
-        return{
-          places: prevState.places.filter(place=>{
-            return place.key !== key;
-          })
-        };
-    });
+    this.props.onDeletePlace(key);
   };
 
   render() {
     return (
       <View style={styles.container}>
     <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
-    <PlaceList places={this.state.places} onItemDeleted={this.placeDeletedHandler}/>
+    <PlaceList places={this.props.places} onItemDeleted={this.placeDeletedHandler}/>
       </View>
     );
   }
@@ -66,3 +50,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    places: state.places.places
+  };
+};
+
+const mapDispatchToProps = dispatch =>{
+  return {
+    onAddPlace: (name) => dispatch(addPlace(name)),
+    onDeletePlace: (key) => dispatch(deletePlace(key))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (App);
